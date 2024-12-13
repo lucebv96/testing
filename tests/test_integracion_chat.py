@@ -101,56 +101,56 @@ def test_manejo_errores_red():
     # Verificamos que cliente1 (emisor) no recibió su propio mensaje
     assert cliente1.ultimo_mensaje is None
 
-# # Prueba de manejo de desconexión repentina (corregida)
-# def test_desconexion_durante_mensajes():
-#     clientes.clear()
-#     usuarios.clear()
+# Prueba de manejo de desconexión repentina (corregida)
+def test_desconexion_durante_mensajes():
+    clientes.clear()
+    usuarios.clear()
 
-#     cliente1 = ClienteSimulado("Usuario1")
-#     cliente2 = Mock(spec=ClienteSimulado)
-#     cliente3 = ClienteSimulado("Usuario3")
+    cliente1 = ClienteSimulado("Usuario1")
+    cliente2 = Mock(spec=ClienteSimulado)
+    cliente3 = ClienteSimulado("Usuario3")
 
-#     cliente2.nombre = "Usuario2"
-#     cliente3.nombre = "Usuario3"
-#     cliente2.ultimo_mensaje = None
-#     cliente3.ultimo_mensaje = None
+    cliente2.nombre = "Usuario2"
+    cliente3.nombre = "Usuario3"
+    cliente2.ultimo_mensaje = None
+    cliente3.ultimo_mensaje = None
 
-#     clientes.extend([cliente1, cliente2, cliente3])
-#     usuarios.extend(["Usuario1", "Usuario2", "Usuario3"])
+    clientes.extend([cliente1, cliente2, cliente3])
+    usuarios.extend(["Usuario1", "Usuario2", "Usuario3"])
 
-#     mensaje1 = "Hola desde Usuario1!"
-#     mensaje2 = "Mensaje de Usuario2"
-#     mensaje3 = "Mensaje de Usuario3"
+    mensaje1 = "Hola desde Usuario1!"
+    mensaje2 = "Mensaje de Usuario2"
+    mensaje3 = "Mensaje de Usuario3"
 
-#     # Cliente1 envía un mensaje
-#     broadcast(mensaje1.encode("utf-8"), cliente1)
-#     cliente2.ultimo_mensaje = mensaje1.encode("utf-8")  # Simulamos recepción del mensaje
-#     assert cliente2.ultimo_mensaje == mensaje1.encode("utf-8")
-#     assert cliente3.ultimo_mensaje == mensaje1.encode("utf-8")
-#     assert cliente1.ultimo_mensaje is None
+    # Cliente1 envía un mensaje
+    broadcast(mensaje1.encode("utf-8"), cliente1)
+    cliente2.ultimo_mensaje = mensaje1.encode("utf-8")  # Simulamos recepción del mensaje
+    assert cliente2.ultimo_mensaje == mensaje1.encode("utf-8")
+    assert cliente3.ultimo_mensaje == mensaje1.encode("utf-8")
+    assert cliente1.ultimo_mensaje is None
 
-#     # Cliente2 envía un mensaje
-#     cliente2.send.reset_mock()  # Reiniciamos el mock para este nuevo caso
-#     broadcast(mensaje2.encode("utf-8"), cliente2)
-#     cliente2.ultimo_mensaje = mensaje2.encode("utf-8")  # Simulamos que cliente2 también recibe su propio mensaje
-#     assert cliente1.ultimo_mensaje == mensaje2.encode("utf-8")
-#     assert cliente3.ultimo_mensaje == mensaje2.encode("utf-8")
+    # Cliente2 envía un mensaje
+    cliente2.send.reset_mock()  # Reiniciamos el mock para este nuevo caso
+    broadcast(mensaje2.encode("utf-8"), cliente2)
+    cliente2.ultimo_mensaje = mensaje2.encode("utf-8")  # Simulamos que cliente2 también recibe su propio mensaje
+    assert cliente1.ultimo_mensaje == mensaje2.encode("utf-8")
+    assert cliente3.ultimo_mensaje == mensaje2.encode("utf-8")
 
-#     # Cliente3 envía un mensaje
-#     broadcast(mensaje3.encode("utf-8"), cliente3)
-#     cliente2.ultimo_mensaje = mensaje3.encode("utf-8")  # Actualizamos ultimo_mensaje de cliente2
-#     assert cliente1.ultimo_mensaje == mensaje3.encode("utf-8")
-#     assert cliente2.ultimo_mensaje == mensaje3.encode("utf-8")
+    # Cliente3 envía un mensaje
+    broadcast(mensaje3.encode("utf-8"), cliente3)
+    cliente2.ultimo_mensaje = mensaje3.encode("utf-8")  # Actualizamos ultimo_mensaje de cliente2
+    assert cliente1.ultimo_mensaje == mensaje3.encode("utf-8")
+    assert cliente2.ultimo_mensaje == mensaje3.encode("utf-8")
 
-#     # Cliente2 se desconecta repentinamente
-#     cliente2.activo = False
-#     cliente2.send.side_effect = ConnectionError("Cliente desconectado")
-#     cliente2.ultimo_mensaje = None  # Establecemos ultimo_mensaje a None al desconectar
+    # Cliente2 se desconecta repentinamente
+    cliente2.activo = False
+    cliente2.send.side_effect = ConnectionError("Cliente desconectado")
+    cliente2.ultimo_mensaje = None  # Establecemos ultimo_mensaje a None al desconectar
 
-#     # Cliente1 envía un nuevo mensaje
-#     broadcast("Nuevo mensaje para Usuario1!".encode("utf-8"), cliente1)
-#     assert cliente3.ultimo_mensaje == "Nuevo mensaje para Usuario1!".encode("utf-8")
-#     assert cliente2.ultimo_mensaje is None  # Ahora esta aserción debería pasar
+    # Cliente1 envía un nuevo mensaje
+    broadcast("Nuevo mensaje para Usuario1!".encode("utf-8"), cliente1)
+    assert cliente3.ultimo_mensaje == "Nuevo mensaje para Usuario1!".encode("utf-8")
+    assert cliente2.ultimo_mensaje is None  # Ahora esta aserción debería pasar
 
 def test_varios_clientes_mensajes_simultaneos():
     clientes.clear()
