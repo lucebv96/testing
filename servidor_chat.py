@@ -93,7 +93,7 @@ def cambiar_nombre(cliente, nuevo_nombre):
         index = clientes.index(cliente)
         antiguo_nombre = usuarios[index]
         usuarios[index] = nuevo_nombre
-        mensaje = f"Tu nombre ha sido cambiado de {antiguo_nombre} a {nuevo_nombre}"
+        mensaje = f"Tu nombre ha sido cambiado a {nuevo_nombre}"  # Modifica esta línea
         cliente.send(mensaje.encode('utf-8'))
         broadcast(f"PenguBot: {antiguo_nombre} ahora es conocido como {nuevo_nombre}".encode('utf-8'), cliente)
     except ValueError:
