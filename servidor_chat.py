@@ -88,5 +88,14 @@ def receive_connections():
         thread = threading.Thread(target=handle_messages , args=(client,))
         thread.start()
 
+def cambiar_nombre(cliente, nuevo_nombre):
+    # Buscamos el índice del cliente en la lista
+    index = clientes.index(cliente)
+    # Cambiamos el nombre en la lista de usuarios
+    usuarios[index] = nuevo_nombre
+    # Enviamos un mensaje de confirmación al cliente
+    cliente.send(f"Tu nombre ha sido cambiado a {nuevo_nombre}".encode('utf-8'))
+
+
 if __name__ == "__main__":
     receive_connections()
