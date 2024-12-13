@@ -89,12 +89,18 @@ def receive_connections():
         thread.start()
 
 def cambiar_nombre(cliente, nuevo_nombre):
-    # Buscamos el índice del cliente en la lista
-    index = clientes.index(cliente)
-    # Cambiamos el nombre en la lista de usuarios
-    usuarios[index] = nuevo_nombre
-    # Enviamos un mensaje de confirmación al cliente
-    cliente.send(f"Tu nombre ha sido cambiado a {nuevo_nombre}".encode('utf-8'))
+    try:
+        index = clientes.index(cliente)
+        antiguo_nombre = usuarios[index]
+        usuarios[index] = nuevo_nombre
+        mensaje = f"Tu nombre ha sido cambiado de {antiguo_nombre} a {nuevo_nombre}"
+        cliente.send(mensaje.encode('utf-8'))
+        broadcast(f"PenguBot: {antiguo_nombre} ahora es conocido como {nuevo_nombre}".encode('utf-8'), cliente)
+    except ValueError:
+        # El cliente no está en la lista
+        print(f"Error: El cliente {cliente} no está registrado.")
+    except Exception as e:
+        print(f"Error al cambiar el nombre: {e}")
 
 
 if __name__ == "__main__":
